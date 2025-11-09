@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <rect width="100%" height="100%" fill="#102018"/>
+  <g transform="translate(64,64)">
+    <!-- Top view mushroom cap: circle with spots -->
+    <ellipse cx="0" cy="-6" rx="36" ry="18" fill="#8fbf7f" stroke="#bff3b3" stroke-width="2"/>
+    <circle cx="-10" cy="-10" r="4" fill="#ffffff" opacity="0.9"/>
+    <circle cx="6" cy="-12" r="3" fill="#ffffff" opacity="0.9"/>
+    <circle cx="14" cy="-4" r="3.5" fill="#ffffff" opacity="0.9"/>
+    <!-- slight underside rim to indicate depth -->
+    <ellipse cx="0" cy="6" rx="16" ry="6" fill="#6a8b58" opacity="0.9"/>
+  </g>
+</svg>

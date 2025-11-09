@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="64" viewBox="0 0 128 64">
+  <rect width="128" height="64" fill="#222" />
+  <rect x="8" y="8" width="112" height="48" fill="#333" rx="6" />
+  <text x="64" y="36" font-size="12" text-anchor="middle" fill="#fff">INVENTORY</text>
+</svg>

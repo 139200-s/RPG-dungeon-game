@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon RPG</title>
+    <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="game-container">
+           <canvas id="gameCanvas" class="game-canvas" width="604" height="338" tabindex="0" style="outline: none; width: min(90vw, 1200px); height: auto;"></canvas>
+        
+        <div id="ui-overlay" class="ui-overlay">
+            <!-- HUD Elements -->
+            <div class="hud health-bar">
+                <div class="health-bar-inner"></div>
+            </div>
+        </div>
+
+    <!-- Debug elements removed -->
+
+            <script>
+                // Ensure the canvas receives keyboard focus when clicked so Tab/AWSD input is captured.
+                (function(){
+                    const canvas = document.getElementById('gameCanvas');
+                    if (!canvas) return;
+                    // Make sure it's focusable
+                    canvas.setAttribute('tabindex', '0');
+                    canvas.style.outline = 'none';
+                    // Focus on click (user gesture)
+                    canvas.addEventListener('click', function() { this.focus(); });
+                    // Optional: focus the canvas on first user interaction via keyboard as well
+                    window.addEventListener('keydown', function fn(e){
+                        // once we see a movement/inventory key, ensure canvas has focus
+                        const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D','Tab',' '];
+                        if (keys.includes(e.key)){
+                            if (document.activeElement !== canvas) canvas.focus();
+                            window.removeEventListener('keydown', fn);
+                        }
+                    });
+                })();
+            </script>
+        <!-- Menu overlays -->
+        <div class="menu inventory-menu">
+            <!-- Inventory content will be dynamically generated -->
+        </div>
+
+        <div class="menu combat-menu">
+            <!-- Combat UI will be dynamically generated -->
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
+
+    <!-- Core Engine -->
+    <script src="src/engine/AssetLoader.js"></script>
+    <script src="src/graphics/Sprites.js"></script>
+    <script src="src/graphics/TextureManager.js"></script>
+    <script src="src/engine/Canvas.js"></script>
+    <script src="src/input/Input.js"></script>
+    <script src="src/engine/Camera.js"></script>
+    <script src="src/engine/GameEngine.js"></script>
+
+    <!-- World Generation -->
+    <script src="src/world/Tile.js"></script>
+    <script src="src/world/World.js"></script>
+    <script src="src/world/Chunk.js"></script>
+    <script src="src/world/Section.js"></script>
+    <script src="src/world/BiomeGenerator.js"></script>
+    <script src="src/world/WorldGenerator.js"></script>
+
+    <!-- Game Systems -->
+    <script src="src/systems/Combat.js"></script>
+    <script src="src/systems/Inventory.js"></script>
+    <script src="src/systems/SaveManager.js"></script>
+    <script src="src/systems/DriveSync.js"></script>
+
+    <!-- Base Classes -->
+    <script src="src/entities/Entity.js"></script>
+    <script src="src/effects/Effect.js"></script>
+    <script src="src/effects/DamageNumber.js"></script>
+    <script src="src/effects/HealNumber.js"></script>
+
+    <!-- Items -->
+    <script src="src/items/ItemManager.js"></script>
+    <script src="src/items/HealthPotion.js"></script>
+    <script src="src/items/Weapon.js"></script>
+    <script src="src/items/Armor.js"></script>
+    <script src="src/items/Accessory.js"></script>
+
+    <!-- Game Objects -->
+    <script src="src/entities/objects/Chest.js"></script>
+    <script src="src/entities/objects/Door.js"></script>
+    <script src="src/entities/objects/Projectile.js"></script>
+
+    <!-- Characters -->
+    <script src="src/entities/Player.js"></script>
+    <script src="src/entities/Enemy.js"></script>
+    <script src="src/entities/Boss.js"></script>
+    <script src="src/entities/Item.js"></script>
+
+    <!-- UI -->
+    <script src="src/ui/UI.js"></script>
+    <script src="src/ui/HUD.js"></script>
+    <script src="src/ui/InventoryUI.js"></script>
+    <script src="src/ui/CombatUI.js"></script>
+
+    <!-- Main -->
+    <script src="src/main.js"></script>
+</body>
+</html>

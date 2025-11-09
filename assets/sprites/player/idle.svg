@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Top-down player placeholder: circle body with small directional marker -->
+  <rect width="64" height="64" fill="#0b0b0b" />
+  <circle cx="32" cy="32" r="14" fill="#ffd166" stroke="#000" stroke-width="1" />
+  <!-- Direction marker (pointing up) -->
+  <path d="M32 14 L28 24 L36 24 Z" fill="#000" />
+  <text x="32" y="58" font-size="8" text-anchor="middle" fill="#fff">IDLE</text>
+</svg>

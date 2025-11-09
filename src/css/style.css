@@ -1,0 +1,217 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #305981;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Game container */
+.game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #1a1a1a;
+}
+
+/* Canvas styles */
+#gameCanvas {
+    border: 2px solid #588ec4;
+    background: #000;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    border-radius: 2px;
+    image-rendering: pixelated;  /* Keep pixel art crisp */
+    image-rendering: crisp-edges;  /* Fallback */
+}
+
+/* UI Overlay */
+.ui-overlay {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+}
+
+/* Debug panel */
+#debug {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ecf0f1;
+    font-family: 'Consolas', monospace;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 1001;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(43, 46, 180, 0.1);
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+
+/* HUD Elements */
+.hud {
+    position: absolute;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.health-bar {
+    top: 30px;
+    left: 30px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inventory-bar {
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Menu styles */
+.menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    color: #fff;
+    display: none;
+}
+
+.menu.active {
+    display: block;
+}
+
+/* Inventory slot styles */
+.inventory-slot {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+.inventory-slot:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Item tooltip */
+.tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 1002;
+    pointer-events: none;
+    display: none;
+}
+
+.inventory-slot:hover .tooltip {
+    display: block;
+}
+
+/* Combat effects */
+.damage-text {
+    position: absolute;
+    color: #e74c3c;
+    font-weight: bold;
+    text-shadow: 0 0 3px #000;
+    animation: float-up 1s ease-out forwards;
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+}
+
+/* Loading screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1472d1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #7bb1be;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .game-container {
+        max-height: none;
+    }
+
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+    }
+
+    .inventory-bar {
+        bottom: 10px;
+    }
+
+    #debug {
+        font-size: 12px;
+    }
+}

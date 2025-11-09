@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Top-down attack sprite placeholder -->
+  <rect width="64" height="64" fill="#0b0b0b" />
+  <circle cx="32" cy="32" r="14" fill="#f08367" stroke="#000" stroke-width="1" />
+  <!-- Attack arc / slash indicator (top view) -->
+  <path d="M38 18 A18 18 0 0 1 54 32 L48 34 A12 12 0 0 0 38 22 Z" fill="#fff" opacity="0.9" />
+  <path d="M32 14 L28 24 L36 24 Z" fill="#000" />
+  <text x="32" y="58" font-size="8" text-anchor="middle" fill="#fff">ATK</text>
+</svg>
