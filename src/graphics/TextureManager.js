@@ -30,18 +30,24 @@ class TextureManager {
             }
         }
 
-        const tileFolders = [
-            'floor', 'wall', 'water', 'lava',
-            'crystal', 'mushroom', 'pillar', 'rubble', 'chasm'
-        ];
-        for (const folder of tileFolders) {
-            const prefix = 'tiles_' + folder;
-            await this.loadTexturesFromFolder(prefix, `assets/tiles/${folder}`, folder, 'png', 16);
-            if (!this.textures.has(prefix)) {
-                this.textures.set(prefix, this.createPlaceholderTexture(prefix));
-            }
+        async loadTextures() {
+    // ... bestaande textureList ...
+
+    const tileFolders = [
+        'floor', 'wall', 'water', 'lava',
+        'crystal', 'mushroom', 'pillar', 'rubble', 'chasm'
+    ];
+    for (const folder of tileFolders) {
+        const prefix = 'tiles_' + folder;
+        let maxVariants = 1;
+        if (folder === 'lava') maxVariants = 15; // voor lava meer textures laden
+        await this.loadTexturesFromFolder(prefix, `assets/tiles/${folder}`, folder, 'png', maxVariants);
+        if (!this.textures.has(prefix)) {
+            this.textures.set(prefix, this.createPlaceholderTexture(prefix));
         }
     }
+}
+
 
    async loadTexturesFromFolder(prefix, folderUrl, baseName = null, ext = 'png', maxVariants = 1) { // default maxVariants 1
     if (folderUrl.endsWith('/')) folderUrl = folderUrl.slice(0, -1);
@@ -238,3 +244,4 @@ class Tile {
         return x >= tileX - 16 && x < tileX + 16 && y >= tileY - 16 && y < tileY + 16;
     }
 }
+
