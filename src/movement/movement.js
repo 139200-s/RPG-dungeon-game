@@ -3,43 +3,55 @@
     window.Movement = window.Movement || {};
 
     window.Movement.updatePlayerMovement = function(player, deltaTime) {
-        try {
-            const input = player.gameEngine.input.getMovementVector();
+        const tileSize = 32;
+        player.x = Math.round(player.x); // Zorg gegarandeerd dat startpositie altijd op tilegrid is
+        player.y = Math.round(player.y);
 
-            // Verbied diagonaal lopen: als beide richtingen worden ingedrukt, geef prioriteit aan horizontaal
-            if (input.dx !== 0 && input.dy !== 0) {
-                input.dy = 0;
-            }
+        if (!player.isMoving) {
+            const input = player.gameEngine.input.getMovementVector();
+            // Prioriteit horizontaal, geen diagonalen
+            if (input.dx !== 0 && input.dy !== 0) input.dy = 0;
 
             if (input.dx !== 0 || input.dy !== 0) {
-                player.direction = Math.atan2(input.dy, input.dx);
+                // Huidige tile
+                let tileX = Math.round(player.x / tileSize);
+                let tileY = Math.round(player.y / tileSize);
 
-                // Bereken nieuwe positie
-                let nextX = player.x + input.dx * player.speed * deltaTime;
-                let nextY = player.y + input.dy * player.speed * deltaTime;
+                let targetTileX = tileX + input.dx;
+                let targetTileY = tileY + input.dy;
 
-                // Zorg dat coördinaten altijd gehele getallen zijn
-                nextX = Math.round(nextX);
-                nextY = Math.round(nextY);
+                let newX = targetTileX * tileSize;
+                let newY = targetTileY * tileSize;
 
-                // Controleer botsingen per as
-                if (!window.Movement.checkCollision(player, nextX, player.y)) {
-                    player.x = nextX;
+                // Check collisions op nieuwe tile
+                if (!window.Movement.checkCollision(player, newX, newY)) {
+                    player.targetX = newX;
+                    player.targetY = newY;
+                    player.isMoving = true;
+                    player.direction = Math.atan2(input.dy, input.dx);
+                    player.currentAnimation = 'walk';
+                } else {
+                    player.currentAnimation = 'idle';
                 }
-                if (!window.Movement.checkCollision(player, player.x, nextY)) {
-                    player.y = nextY;
-                }
-
-                // Rond af zodat X en Y nooit decimalen hebben
-                player.x = Math.round(player.x);
-                player.y = Math.round(player.y);
-
-                player.currentAnimation = 'walk';
             } else {
                 player.currentAnimation = 'idle';
             }
-        } catch (e) {
-            console.error('Movement.updatePlayerMovement error:', e);
+        } else {
+            // Animeer richting targetX/targetY
+            let speed = player.speed * deltaTime;
+            if (Math.abs(player.x - player.targetX) > speed) {
+                player.x += Math.sign(player.targetX - player.x) * speed;
+            } else {
+                player.x = player.targetX;
+            }
+            if (Math.abs(player.y - player.targetY) > speed) {
+                player.y += Math.sign(player.targetY - player.y) * speed;
+            } else {
+                player.y = player.targetY;
+            }
+            if (player.x === player.targetX && player.y === player.targetY) {
+                player.isMoving = false;
+            }
         }
     };
 
@@ -56,6 +68,5 @@
         } catch (e) {}
         return false;
     };
-
 })();
 try { window.Movement.__isReal = true; } catch (e) {}
