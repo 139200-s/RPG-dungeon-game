@@ -89,3 +89,37 @@ class BiomeGenerator {
         return this.biomes.LavaHollows;
     }
 }
+
+class Section {
+    // ... je bestaande constructor en methodes
+    
+    generateFeatures() {
+        // Voorbeeld implementatie: maak 2 kisten per sectie
+        this.generateChests(2);
+
+        // Boss kans en extra kisten kunnen hier ook
+        // Bijvoorbeeld:
+        const sectionHash = this.x * 31 + this.y;
+        const random = this.worldGenerator.seededRandom(sectionHash);
+        const roll = random();
+
+        if (roll < 0.11) { // 1/9 kans normale boss
+            const bossType = this.determineBossType(); // implementeer deze methode
+            this.generateBoss(bossType);
+            this.generateChests(5); // extra kisten
+        } else if (roll < 0.36) { // 1/4 kans mini-boss
+            this.generateBoss('mini');
+            this.generateChests(2);
+        }
+    }
+
+    generateChests(count) {
+        // Implementeer chest generatie logica, als je deze hebt
+    }
+
+    generateBoss(type) {
+        // Implementeer boss creatie, als je deze hebt
+    }
+    
+    // Optioneel andere methodes die generateFeatures nodig heeft
+}
