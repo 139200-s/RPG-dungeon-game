@@ -123,3 +123,4 @@ class Section {
     
     // Optioneel andere methodes die generateFeatures nodig heeft
 }
+
