@@ -30,7 +30,7 @@ class TextureManager {
                 this.textures.set(key, this.createPlaceholderTexture(key));
             }
         }
-
+    }
         async loadTextures() {
     // ... bestaande textureList ...
 
@@ -245,5 +245,6 @@ class Tile {
         return x >= tileX - 16 && x < tileX + 16 && y >= tileY - 16 && y < tileY + 16;
     }
 }
+
 
 
