@@ -3,13 +3,8 @@ class Tile {
         this.type = type;
         this.x = x;
         this.y = y;
+        this.textureKey = textureManager ? this.assignTexture(textureManager) : null;
 
-        // Kies vaste texture key bij aanmaak via textureManager
-        if (textureManager) {
-            this.textureKey = this.assignTexture(textureManager);
-        }
-
-        // Rest van je constructor...
         switch (type) {
             case 'wall':
                 this.collidable = true;
@@ -38,35 +33,20 @@ class Tile {
             default:
                 this.collidable = false;
                 this.color = '#333';
+                break;
         }
     }
 
-render(ctx, camera, textureManager) {
-    const screenPos = camera.worldToScreen(this.x * 32, this.y * 32);
-    if (!camera.isOnScreen(screenPos.x, screenPos.y, 32)) return;
+    render(ctx, camera, textureManager) {
+        const screenPos = camera.worldToScreen(this.x * 32, this.y * 32);
+        if (!camera.isOnScreen(screenPos.x, screenPos.y, 32)) return;
 
-    let sprite = null;
-    if (textureManager && this.textureKey) {
-        sprite = textureManager.getTextureByKey(this.textureKey);
+        let sprite = textureManager ? textureManager.getTextureByKey(this.textureKey) : null;
+        if (sprite && sprite.complete && sprite.naturalWidth > 0) {
+            ctx.drawImage(sprite, screenPos.x - 16, screenPos.y - 16, 32, 32);
+        } else {
+            ctx.fillStyle = this.color;
+            ctx.fillRect(screenPos.x - 16, screenPos.y - 16, 32, 32);
+        }
     }
-
-    if (sprite instanceof HTMLImageElement && sprite.complete && sprite.naturalWidth > 0) {
-        ctx.drawImage(sprite, screenPos.x - 16, screenPos.y - 16, 32, 32);
-    } else {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(screenPos.x - 16, screenPos.y - 16, 32, 32);
-    }
-
-    if (this.glowing) {
-        ctx.save();
-        ctx.globalAlpha = 0.1 + 0.05 * Math.sin(Date.now() / 500);
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(screenPos.x, screenPos.y, 20, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-    }
-}
-
-
 }
