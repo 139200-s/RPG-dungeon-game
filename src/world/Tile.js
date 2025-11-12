@@ -14,6 +14,14 @@ class Tile {
                 this.collidable = false;
                 this.color = '#444';
                 break;
+            case 'grass':
+                this.collidable = false;
+                this.color = '#3a8c3a';
+                break;
+            case 'dirt':
+                this.collidable = false;
+                this.color = '#6b4a23';
+                break;
             case 'mushroom':
                 this.collidable = false;
                 this.color = '#6c6';
@@ -29,6 +37,27 @@ class Tile {
                 this.collidable = true;
                 this.color = '#111';
                 this.deadly = true;
+                break;
+            case 'pillar':
+                this.collidable = true;
+                this.color = '#998877';
+                break;
+            case 'rubble':
+                this.collidable = true;
+                this.color = '#555444';
+                break;
+            case 'crystal':
+                this.collidable = false;
+                this.color = '#88bbcc';
+                break;
+            case 'sand':
+                this.collidable = false;
+                this.color = '#e4d6a7';
+                break;
+            case 'water':
+                this.collidable = false;
+                this.slowdown = 0.3;
+                this.color = '#3366cc';
                 break;
             default:
                 this.collidable = false;
