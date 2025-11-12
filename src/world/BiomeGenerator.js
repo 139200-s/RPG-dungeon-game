@@ -16,8 +16,10 @@ class BiomeGenerator {
             },
             CrystalDepths: {
                 getTileType: (noise) => {
-                    if (noise > 0.75) return 'crystal';
-                    if (noise > 0.6) return 'wall';
+                    if (noise > 0.8) return 'crystal';
+                    if (noise > 0.6) return 'pillar';
+                    if (noise > 0.5) return 'rubble';
+                    if (noise > 0.4) return 'wall';
                     return 'floor';
                 },
                 getColor: () => '#445566'
@@ -25,6 +27,7 @@ class BiomeGenerator {
             MushroomCaverns: {
                 getTileType: (noise, baseNoise) => {
                     if (noise > 0.7 && baseNoise > 0) return 'mushroom';
+                    if (noise > 0.85) return 'pillar';
                     if (noise > 0.8) return 'wall';
                     return 'floor';
                 },
@@ -32,8 +35,9 @@ class BiomeGenerator {
             },
             AbyssChasm: {
                 getTileType: (noise) => {
-                    if (noise < 0.35) return 'chasm';
-                    if (noise > 0.85) return 'wall';
+                    if (noise < 0.25) return 'chasm';
+                    if (noise < 0.45) return 'water';
+                    if (noise > 0.75) return 'wall';
                     return 'floor';
                 },
                 getColor: () => '#333344'
@@ -42,7 +46,9 @@ class BiomeGenerator {
                 getTileType: (noise) => {
                     if (noise > 0.9) return 'pillar';
                     if (noise > 0.85) return 'rubble';
-                    return noise > 0.7 ? 'wall' : 'floor';
+                    if (noise > 0.75) return 'wall';
+                    if (noise > 0.65) return 'floor';
+                    return 'dirt';
                 },
                 getColor: () => '#665544'
             },
@@ -50,7 +56,8 @@ class BiomeGenerator {
                 getTileType: (noise, baseNoise) => {
                     if (noise < 0.45 - (baseNoise * 0.15)) return 'lava';
                     if (noise > 0.8) return 'wall';
-                    return 'floor';
+                    if (noise > 0.5) return 'floor';
+                    return 'sand';
                 },
                 getColor: () => '#664433'
             }
