@@ -1,3 +1,4 @@
+console.log('Loading TextureManager.js');
 class TextureManager {
     constructor() {
         this.textures = new Map();
@@ -244,4 +245,5 @@ class Tile {
         return x >= tileX - 16 && x < tileX + 16 && y >= tileY - 16 && y < tileY + 16;
     }
 }
+
 
