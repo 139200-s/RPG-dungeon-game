@@ -1,3 +1,5 @@
+#werkt'niet?
+
 class WorldGenerator {
     constructor(gameOrSeed = Date.now(), maybeSeed) {
         if (typeof gameOrSeed === 'object' && gameOrSeed !== null) {
@@ -58,3 +60,4 @@ class WorldGenerator {
         }
     }
 }
+
