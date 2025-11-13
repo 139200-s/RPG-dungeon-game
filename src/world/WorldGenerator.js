@@ -1,5 +1,3 @@
-#werkt'niet?
-
 class WorldGenerator {
     constructor(gameOrSeed = Date.now(), maybeSeed) {
         if (typeof gameOrSeed === 'object' && gameOrSeed !== null) {
@@ -9,12 +7,18 @@ class WorldGenerator {
             this.gameEngine = null;
             this.seed = gameOrSeed || Date.now();
         }
+
         this.sections = new Map();
-        this.biomeGenerator = new BiomeGenerator(this.seed);
-        this.SECTION_SIZE = 5;
-        this.CHUNK_SIZE = 16;
         this.loadedSections = new Set();
         this.visibleSections = new Set();
+
+        this.SECTION_SIZE = 5;
+        this.CHUNK_SIZE = 16;
+
+        // Ensure BiomeGenerator is defined elsewhere
+        this.biomeGenerator = new BiomeGenerator(this.seed);
+
+        // Initialize first section
         this.getSection(0, 0);
     }
 
@@ -31,22 +35,31 @@ class WorldGenerator {
         const viewDistance = 3;
         const loadDistance = 4;
         this.visibleSections.clear();
+
         const centerX = Math.floor(playerX / (this.SECTION_SIZE * this.CHUNK_SIZE));
         const centerY = Math.floor(playerY / (this.SECTION_SIZE * this.CHUNK_SIZE));
+
         let movementVector = { dx: 0, dy: 0 };
-        try {
-            movementVector = (this.gameEngine && this.gameEngine.input && this.gameEngine.input.getMovementVector)
-                ? this.gameEngine.input.getMovementVector()
-                : { dx: 0, dy: 0 };
-        } catch { }
+        if (this.gameEngine?.input?.getMovementVector) {
+            try {
+                movementVector = this.gameEngine.input.getMovementVector() || { dx: 0, dy: 0 };
+            } catch (e) {
+                console.warn("Movement vector retrieval failed:", e);
+            }
+        }
+
         const loadAheadX = Math.sign(movementVector.dx);
         const loadAheadY = Math.sign(movementVector.dy);
 
         for (let dx = -loadDistance; dx <= loadDistance; dx++) {
             for (let dy = -loadDistance; dy <= loadDistance; dy++) {
                 const section = this.getSection(centerX + dx, centerY + dy);
-                if (Math.abs(dx) <= viewDistance && Math.abs(dy) <= viewDistance ||
-                    Math.abs(dx + loadAheadX) <= viewDistance && Math.abs(dy + loadAheadY) <= viewDistance) {
+                const inView = (
+                    (Math.abs(dx) <= viewDistance && Math.abs(dy) <= viewDistance) ||
+                    (Math.abs(dx + loadAheadX) <= viewDistance && Math.abs(dy + loadAheadY) <= viewDistance)
+                );
+
+                if (inView) {
                     this.visibleSections.add(section);
                     if (!section.isGenerated) section.generate();
                 }
@@ -60,4 +73,3 @@ class WorldGenerator {
         }
     }
 }
-
