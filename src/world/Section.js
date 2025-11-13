@@ -6,30 +6,31 @@ class Section {
         this.gameEngine = worldGenerator?.gameEngine || null;
         this.chunks = new Map();
         this.isGenerated = false;
-        this.entities = new Set(); // Bijv. bomen, vijanden
+        this.entities = new Set(); // b.v. bomen, vijanden
         this.chests = new Set();
         this.SIZE = 5; // aantal chunks per sectie
         this.biome = null;
+
         this.generate();
     }
 
     generate() {
         if (this.isGenerated) return;
 
-        // Bepaal biome via biomeGenerator
+        // Biome ophalen via biomeGenerator
         this.biome = this.worldGenerator.biomeGenerator.getBiomeAt(this.x, this.y);
 
-        // Genereer chunks binnen deze sectie
+        // Chunks genereren binnen deze sectie
         for (let y = 0; y < this.SIZE; y++) {
             for (let x = 0; x < this.SIZE; x++) {
-                const chunkX = this.x * this.SIZE + x;
-                const chunkY = this.y * this.SIZE + y;
-                const chunk = new Chunk(chunkX, chunkY, this);
+                const chunkCoordsX = this.x * this.SIZE + x;
+                const chunkCoordsY = this.y * this.SIZE + y;
+                const chunk = new Chunk(chunkCoordsX, chunkCoordsY, this);
                 this.chunks.set(`${x},${y}`, chunk);
             }
         }
 
-        // Voeg extra features toe afhankelijk van biome
+        // Extra features toevoegen
         this.generateFeatures();
 
         this.isGenerated = true;
@@ -38,7 +39,7 @@ class Section {
     generateFeatures() {
         if (!this.gameEngine) return;
 
-        switch(this.biome) {
+        switch (this.biome) {
             case 'forest':
                 this.addTrees(10);
                 this.addChests(3);
@@ -59,7 +60,13 @@ class Section {
     addTrees(count) {
         for (let i = 0; i < count; i++) {
             const pos = this.getRandomPosition();
-            const tree = new Tree(pos.x, pos.y); // Tree class moet bestaan
+            let tree = null;
+            if (typeof Tree !== 'undefined') {
+                tree = new Tree(pos.x, pos.y);
+            } else {
+                // fallback: creeer dummy object met render functie
+                tree = { x: pos.x, y: pos.y, render: () => {} };
+            }
             this.entities.add(tree);
         }
     }
@@ -67,7 +74,12 @@ class Section {
     addCacti(count) {
         for (let i = 0; i < count; i++) {
             const pos = this.getRandomPosition();
-            const cactus = new Cactus(pos.x, pos.y); // Cactus entiteit zelf toevoegen
+            let cactus = null;
+            if (typeof Cactus !== 'undefined') {
+                cactus = new Cactus(pos.x, pos.y);
+            } else {
+                cactus = { x: pos.x, y: pos.y, render: () => {} };
+            }
             this.entities.add(cactus);
         }
     }
@@ -75,7 +87,12 @@ class Section {
     addEnemies(count) {
         for (let i = 0; i < count; i++) {
             const pos = this.getRandomPosition();
-            const enemy = new Enemy(this.gameEngine, pos.x, pos.y); // Enemy class vereist gameEngine reference
+            let enemy = null;
+            if (typeof Enemy !== 'undefined' && this.gameEngine) {
+                enemy = new Enemy(this.gameEngine, pos.x, pos.y);
+            } else {
+                enemy = { x: pos.x, y: pos.y, render: () => {} };
+            }
             this.entities.add(enemy);
         }
     }
@@ -83,17 +100,22 @@ class Section {
     addChests(count) {
         for (let i = 0; i < count; i++) {
             const pos = this.getRandomPosition();
-            const chest = new Chest(this.gameEngine, pos.x, pos.y); // Chest entiteit
+            let chest = null;
+            if (typeof Chest !== 'undefined' && this.gameEngine) {
+                chest = new Chest(this.gameEngine, pos.x, pos.y);
+            } else {
+                chest = { x: pos.x, y: pos.y, render: () => {} };
+            }
             this.chests.add(chest);
         }
     }
 
     getRandomPosition() {
-        const tileSize = 32; // pixels per tile, af te stemmen op map
-        // Random positie binnen deel van deze sectie (in pixels)
-        const x = Math.floor(Math.random() * this.SIZE * tileSize);
-        const y = Math.floor(Math.random() * this.SIZE * tileSize);
-        return { x, y };
+        const tileSize = 32; // pas aan op je tile size
+        return {
+            x: Math.floor(Math.random() * this.SIZE * tileSize),
+            y: Math.floor(Math.random() * this.SIZE * tileSize),
+        };
     }
 
     getBiome() {
@@ -101,15 +123,12 @@ class Section {
     }
 
     render(ctx, camera) {
-        // Render alle chunks
         for (const chunk of this.chunks.values()) {
             chunk.render(ctx, camera);
         }
-        // Render entiteiten zoals bomen, vijanden
         for (const entity of this.entities) {
             if (entity.render) entity.render(ctx, camera);
         }
-        // Render kisten apart
         for (const chest of this.chests) {
             if (chest.render) chest.render(ctx, camera);
         }
